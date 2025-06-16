@@ -37,10 +37,7 @@ public class Chapter10CheckElementIsPresent {
 		ElementUtilClass elutil = new ElementUtilClass(driver);
 		System.out.println(elutil.getElementsCount(footerLinksText));
 		elutil.printElementTextList(footerLinksText);
-		
-		
-		
-		
+			
 	}
 
 	public static boolean isElementNotPresent(By locator) {
