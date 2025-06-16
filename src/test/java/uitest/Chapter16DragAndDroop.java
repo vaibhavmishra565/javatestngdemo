@@ -42,7 +42,7 @@ public class Chapter16DragAndDroop {
 //		Action >> interface >> build will perform action (Single or composite) >> which can be uesd further to perform 
 		
 		driver.switchTo().frame(driver.findElement(By.className("demo-frame")))	;
-		driver
+//		driver
 		
 		act.dragAndDrop(driver.findElement(sourceElement), driver.findElement(targetElement));
 		

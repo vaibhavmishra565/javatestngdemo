@@ -1,5 +1,7 @@
 package uitest;
 
+import org.openqa.selenium.HasAuthentication;
+import org.openqa.selenium.UsernameAndPassword;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -12,7 +14,9 @@ public class Chapter19BasicAuthticationPopUp {
 		String username = "admin";
 		String password ="admin";
 		
-		driver.get("https://" + username + ":" + password + "@the-internet.herokuapp.com/basic_auth");
+//		driver.get("https://" + username + ":" + password + "@the-internet.herokuapp.com/basic_auth");
+		driver.get("https://the-internet.herokuapp.com/basic_auth");
+//		((HasAuthentication)driver).register(UsernameAndPassword.of(username, password));
 
 	}
 

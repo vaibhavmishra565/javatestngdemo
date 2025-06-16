@@ -1,14 +1,19 @@
 package uitest;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ElementUtilClass {
 
@@ -262,5 +267,178 @@ public class ElementUtilClass {
 			act.sendKeys(getElement(locator), String.valueOf(c)).pause(pause).build().perform();
 		}
 	}
+///////////////////////// wait Utils ////////////////////////////////////////
+///
+///
 
+	public  void doClick (By locator , int timeout ) {
+		waitForElementVisibility(locator, timeout).click();
+		
+	}
+	public  void doSendKeys (By locator , int timeout , String value) {
+		waitForElementVisibility(locator, timeout).sendKeys(value);
+	}
+	
+	
+	public  WebElement waitForElementPresence(By locator , int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+		return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+		
+//		this meythod says that the this will result when the element is present in DOM of the page ,
+//		not its present on the page so the function is not doing good for the end user 
+//		this does not imply that the elemnt is visible on the page 
+				
+	}
+	public WebElement waitForElementVisibility(By locator , int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+//		This method says it will wait for the element visibilty that it is visible or not 
+	}
+	
+
+	public WebElement waitForElementVisible (By locator , int waitTime , int intervalTime) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(waitTime), Duration.ofSeconds(intervalTime));
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+		
+		
+	}
+	/*
+	  * An expectation for checking an element is visible and enabled such that you can click it
+	  */
+	public void waitForElementAndClick(By locator , int timeout ) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+		wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
+		
+	}
+//	An expectation for checking that all elements present on the web page that match the locatorare visible. Visibility means that the 
+//	elements are not only displayed but also have a heightand width that is greater than 0.
+
+	public  List<WebElement> waitForElementsVisible( By locator , int timeoOut) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoOut));
+		return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+	}
+	
+//	An expectation for checking that there is at least one element present on a web page.
+	public  void waitForElementsPresence(By locator , int timeOut) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+		wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+	}
+	public  String getPageURLIs (String partialUrl, int timeOut) {
+		if (waitForUrlContains(partialUrl, timeOut)) {
+			return driver.getCurrentUrl();
+		}
+		else {
+			return "-1";
+		}
+				
+	}
+	public  String getPageTitleIs (String expectedTitle, int timeOut) {
+		if (waitForTitleIs(expectedTitle, timeOut)) {
+			return driver.getTitle();
+		}
+		else {
+			return "-1";
+		}
+				
+	}
+
+	public  Boolean waitForTitleIs(String expectedTitle, int timeOut) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+		boolean flag = false;
+		try {
+			return wait.until(ExpectedConditions.titleIs(expectedTitle));
+			
+		} catch (TimeoutException e) {
+			System.out.println("The title is not same");
+			return flag;
+
+		}
+
+	}
+	public  Boolean waitForTitleContains(String PartialTitle, int timeOut) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+		boolean flag = false;
+		try {
+			return wait.until(ExpectedConditions.titleContains(PartialTitle));
+			
+		} catch (TimeoutException e) {
+			System.out.println("The title is not same");
+			return flag;
+
+		}
+
+	}
+	public  Boolean waitForUrlContains(String partialUrl, int timeOut) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+		boolean flag = false;
+		try {
+			return wait.until(ExpectedConditions.urlContains(partialUrl));
+			
+		} catch (TimeoutException e) {
+			System.out.println("The URL is not same");
+			return flag;
+
+		}
+
+	}
+	
+	/*
+	 * Wait for alert utilities 
+	 */
+	public  Alert waitForAlertAndSwitch(int timeOut) {
+		WebDriverWait wait  = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+		return wait.until(ExpectedConditions.alertIsPresent());
+	}
+	public  String getAlertText (int timeOut) {
+		return waitForAlertAndSwitch(timeOut).getText();
+	}
+	public  void acceptAlert (int timeOut) {
+		waitForAlertAndSwitch(timeOut).accept();
+		
+	}
+	public  void dismissAlert(int timeOut) {
+		waitForAlertAndSwitch(timeOut).dismiss();
+		
+	}
+	/*
+	 * Wait for frame utility 
+	 */
+	
+	public void waitForFrameUsingLocatorAndSwitchToIt(By frameLocator , int timeOut) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameLocator));
+				
+	}
+	public void waitForFrameUsingLocatorAndSwitchToIt(int frameLocator , int timeOut) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameLocator));
+				
+	}
+	public void waitForFrameUsingLocatorAndSwitchToIt(String frameLocator , int timeOut) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameLocator));
+				
+	}
+	public void waitForFrameUsingLocatorAndSwitchToIt(WebElement frameLocator , int timeOut) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameLocator));
+				
+	}
+	
+	public boolean waitForWindowOrTab(int expectedNumberOfWindows , int timeOut) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+		try {
+			if( wait.until(ExpectedConditions.numberOfWindowsToBe(expectedNumberOfWindows))) {
+			return true ;
+		}
+		}
+		catch (org.openqa.selenium.TimeoutException e) {
+			System.out.println("window number not matched");
+					}
+		return false;
+	}
+
+	
 }
+
+	
